@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <h1>Storage Management</h1>
+
+    <h2>Add New Product</h2>
+    <form action="/add_product" method="post"> 
+        <label for="productId">Product Id:</label>
+        <input type="number" id="productId" name="productId" required><br><br>
+
+        <label for="productName">Product Name:</label>
+        <input type="text" id="productName" name="productName" required><br><br>
+
+        <label for="productQuantity">Quantity:</label>
+        <input type="number" id="productQuantity" name="productQuantity" min="1" required><br><br>
+
+        <button type="submit">Add Product</button>
+    </form>
+
+    <h2>Product List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Product Id</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %} 
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>
+                    <form action="/decrease/{{ product._id }}" method="post" style="display:inline;">
+                        <input type="hidden" name="product_id" value="{{ product._id }}">
+                        <button type="submit">-</button>
+                    </form>
+                    {{ product.quantity }} 
+                    <form action="/increase/{{ product._id }}" method="post" style="display:inline;">
+                        <input type="hidden" name="product_id" value="{{ product._id }}">
+                        <button type="submit">+</button>
+                    </form>
+                </td>
+                <td>
+                    <a href="/edit/{{ product._id }}">Edit</a> 
+                    <form action="/delete/{{ product._id }}" method="post" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
